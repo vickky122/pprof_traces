@@ -7,12 +7,23 @@ import (
 	"time"
 )
 
-func slowFunction() {
-	total := 0
-	for i := 0; i < 1_000_000_00; i++ {
-		total += i
+func workA() {
+	sum := 0
+	for i := 0; i < 50_000_000; i++ {
+		sum += i
 	}
-	fmt.Println("Total:", total)
+}
+
+func workB() {
+	sum := 0
+	for i := 0; i < 100_000_000; i++ {
+		sum += i
+	}
+}
+
+func orchestrator() {
+	workA()
+	workB()
 }
 
 func main() {
@@ -26,6 +37,6 @@ func main() {
 	defer pprof.StopCPUProfile()
 
 	start := time.Now()
-	slowFunction()
+	orchestrator()
 	fmt.Println("Execution time:", time.Since(start))
 }
